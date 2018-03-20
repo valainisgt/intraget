@@ -20,27 +20,14 @@ namespace IntraGet.Tests
                 Assert.IsType<System.Net.Http.HttpResponseMessage>(response);
             }
         }
-        //[Fact]
-        //public void GetReturnsFailureWithBadCredentials()
-        //{
-        //    var authServiceStub = new Mock<IntraGet.IIntraGetAuthenticationService>();
-        //    authServiceStub.Setup(s => s.Authenticate(It.IsAny<System.Security.Principal.IPrincipal>())).Returns(false);
-        //    using (var sut = TestServer.Create(SetupServer))
-        //    {
-        //        var response = sut.HttpClient.GetAsync("/").Result;
-        //        Assert.False(response.IsSuccessStatusCode);
-        //    }
-        //}
-        //[Fact]
-        //public void GetReturnsSuccessWithGoodCredentials()
-        //{
-        //    var authServiceStub = new Mock<IntraGet.IIntraGetAuthenticationService>();
-        //    authServiceStub.Setup(s => s.Authenticate(It.IsAny<System.Security.Principal.IPrincipal>())).Returns(true);
-        //    using (var sut = TestServer.Create(SetupServer))
-        //    {
-        //        var response = sut.HttpClient.GetAsync("/").Result;
-        //        Assert.True(response.IsSuccessStatusCode);
-        //    }
-        //}
+        [Fact]
+        public void GetNuGetReturnsSuccess()
+        {
+            using(var sut = TestServer.Create((app) => app.UseNuGetServer()))
+            {
+                var response = sut.HttpClient.GetAsync("/nuget").Result;
+                Assert.True(response.IsSuccessStatusCode);
+            }
+        }
     }
 }
