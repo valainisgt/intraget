@@ -11,6 +11,7 @@ namespace IntraGet
 {
     public class NuGetGatewayController : NuGetODataController
     {
-        public NuGetGatewayController() : base(NuGetV2WebApiEnabler.CreatePackageRepository("NuGetRepository")) { }
+        public NuGetGatewayController() : 
+            base(NuGetV2WebApiEnabler.CreatePackageRepository("NuGetRepository"), new ApiKeyPackageAuthenticationService(false, null)) { }
     }
 }

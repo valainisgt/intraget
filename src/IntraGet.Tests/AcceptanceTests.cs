@@ -29,5 +29,24 @@ namespace IntraGet.Tests
                 Assert.True(response.IsSuccessStatusCode);
             }
         }
+        [Fact]
+        [UseNuGetRepository]
+        public void PushNuGetPackageSucceeds()
+        {
+            using (var sut = Microsoft.Owin.Hosting.WebApp.Start("http://localhost:5000/", (app) => app.UseNuGetServer()))
+            {
+                var nugetcli = new System.Diagnostics.ProcessStartInfo();
+                nugetcli.FileName = "nuget.exe";
+                nugetcli.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                nugetcli.Arguments = $"push MyNuGetPackage.1.0.0.nupkg -source http://localhost:5000/nuget";
+                using (var exeProcess = System.Diagnostics.Process.Start(nugetcli))
+                {
+                    exeProcess.WaitForExit();
+                }
+
+                var packageDir = new System.IO.FileInfo(System.IO.Path.Combine("NuGetRepository", "MyNuGetPackage", "1.0.0", "MyNuGetPackage.1.0.0.nupkg"));
+                Assert.True(packageDir.Exists);
+            }
+        }
     }
 }
